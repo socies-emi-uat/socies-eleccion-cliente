@@ -1,0 +1,1 @@
+// agregar aqui los tipos de datos customizados para next auth

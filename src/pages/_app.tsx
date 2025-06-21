@@ -13,8 +13,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { defaultSEO } from "@/lib/seo";
 import { ActiveThemeProvider } from "@/components/active-theme";
+import { SessionProvider } from "next-auth/react";
 
 export default function App({ Component, pageProps }: AppProps) {
+  
+  const { session } = pageProps;
+
   return (
     <>
       <Head>
@@ -39,6 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
         `}
       </Script>
       <DefaultSeo {...defaultSEO} />
+      <SessionProvider session={pageProps.session}>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -53,6 +58,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Footer />
           <Toaster />
       </ThemeProvider>
+      </SessionProvider>
     </>
   );
 }

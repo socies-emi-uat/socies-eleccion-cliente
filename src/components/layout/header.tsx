@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ModeToggle } from "@/components/ui/theme-toggle";
 import { ThemeSelector } from "../theme-selector";
+import { UserMenu } from "../UserMenu";
 
 export function Header() {
   return (
@@ -10,13 +11,17 @@ export function Header() {
       <div className="flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-x-2.5">
           <img
-            src="logo.png"
+            src="/logo.png"
             alt="logo"
             className="hidden md:block h-10 w-auto"
           />
           <p className="font-bold">VotoElectronico</p>
         </Link>
-        <ModeToggle />
+        
+        <div className="flex items-center gap-x-2.5"> 
+          <UserMenu />
+          <ModeToggle />
+        </div>
 
       </div>
     </header>
