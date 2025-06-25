@@ -7,6 +7,7 @@ import Hero from "@/components/sections/hero";
 import ItemList from "@/components/sections/items-list";
 import { SubmitCTA } from "@/components/sections/cta-submit";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
 // load candidatos
 const CONTRACT_ADDRESS = "0x3619F576Ec70d3a2B5147944A1CB4CF76b76a426"; // ruta al contrato inteligente.
@@ -19,6 +20,7 @@ export default function Home() {
   const [admin, setAdmin] = useState<string>("");
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,49 +1,83 @@
-import { Metadata } from "next"
-import Link from "next/link"
+'use client';
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { IconStethoscope } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import UserAuthForm from '@/features/auth/user-auth-form.tsx';
+import { useRouter } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: "Login",
-  description: "Login to your account",
-}
+  title: 'Iniciar Sesión',
+  description: 'Sistema de gestión de votos'
+};
 
-export default function LoginPage() {
+export default function SignInViewPage() {
+  const router = useRouter();
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <Link
-        href="/"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute left-4 top-4 md:left-8 md:top-8"
-        )}
-      >
-        <>
-          <Icons.chevronLeft className="mr-2 h-4 w-4" />
-          Back
-        </>
-      </Link>
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <div className="flex flex-col space-y-2 text-center">
-          <Icons.logo className="mx-auto h-6 w-6" />
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Enter your email to sign in to your account
-          </p>
+    <div className='bg-background relative h-screen w-full md:grid md:grid-cols-2 lg:px-0'>
+      {/* Logo / Lado izquierdo */}
+      <div className='bg-muted relative hidden h-full flex-col p-10 md:flex dark:border-r'>
+        <div className='absolute inset-0 dark:bg-zinc-900' />
+        <div className='relative z-20 flex items-center gap-2 text-lg font-bold tracking-tight'>
+          <IconStethoscope className='h-6 w-6' />
+          Sistema de Votacion Electronica
         </div>
-        <p className="px-8 text-center text-sm text-muted-foreground">
-          <Link
-            href="/register"
-            className="hover:text-brand underline underline-offset-4"
-          >
-            Don&apos;t have an account? Sign Up
-          </Link>
-        </p>
+        <div className='relative z-20 mt-auto'>
+          <blockquote className='space-y-2'>
+            <p className='text-lg leading-relaxed'>
+              &ldquo;Una plataforma pensada para mejorar la atención y gestión
+              de tus votos.&rdquo;
+            </p>
+            <footer className='text-sm'>— Equipo de desarrollo</footer>
+          </blockquote>
+        </div>
       </div>
+
+      {/* Formulario de login */}
+      <div className='flex h-full items-center justify-center p-4 lg:p-8'>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[380px]'
+        >
+          <div className='flex flex-col items-center space-y-2 text-center'>
+            <h1 className='text-3xl font-bold'>Bienvenido</h1>
+            <p className='text-muted-foreground text-sm'>
+              Inicia sesión con tus credenciales
+            </p>
+          </div>
+
+          <UserAuthForm />
+
+          <p className='text-muted-foreground px-6 text-center text-xs'>
+            Al continuar, aceptas nuestros{' '}
+            <Link href='/terms' className='hover:text-primary underline'>
+              Términos de servicio
+            </Link>{' '}
+            y{' '}
+            <Link href='/privacy' className='hover:text-primary underline'>
+              Política de privacidad
+            </Link>
+            .
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Botón oculto arriba a la derecha */}
+      <Button
+        onClick={() => router.push('/')}
+        className={cn(
+          buttonVariants({ variant: 'ghost' }),
+          'absolute top-4 right-4 md:top-8 md:right-8'
+        )}
+        variant='outline'
+      >
+        Ir al inicio
+      </Button>
     </div>
-  )
+  );
 }

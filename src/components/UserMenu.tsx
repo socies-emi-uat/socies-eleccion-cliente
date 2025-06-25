@@ -25,9 +25,14 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { usePathname } from "next/navigation";
 
 export function UserMenu() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
+  if (pathname === "/auth/signin") {
+    return null;
+  }
 
   // Si no está autenticado, mostrar botón de login
   if (status === "unauthenticated") {

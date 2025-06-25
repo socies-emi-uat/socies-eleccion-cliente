@@ -32,6 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/pages/directory",
+    "src/types/next-auth.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
