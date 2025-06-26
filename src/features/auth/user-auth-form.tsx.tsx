@@ -54,6 +54,7 @@ export default function UserAuthForm() {
         .then((result) => {
           if (result?.error) {
             toast.error('Credenciales invalidas!');
+            toast.dismiss(loading);
           } else {
             toast.dismiss(loading);
             toast.success('Inicio de sesión exitoso!');
