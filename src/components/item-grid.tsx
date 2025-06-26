@@ -1,12 +1,12 @@
-import { Candidato } from "@/hooks/use-readme";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { useCallback } from "react";
 import ItemCard from "./item-card";
+import { PPartido } from "@/models/PPartido";
 
 type LayoutType = "compact" | "grid" | "row";
 
 interface ItemGridProps {
-  items: Candidato[];
+  items: PPartido[];
   bookmarkedItems: number[];
   onBookmark: (id: number) => void;
   layoutType: LayoutType;
@@ -102,9 +102,9 @@ export function ItemGrid({
         >
           {items.map((item) => (
             <ItemCard
-              key={`${item.id_candidato}-${layoutType}`}
+              key={`${item.id}-${layoutType}`}
               item={item}
-              isBookmarked={bookmarkedItems.includes(item.id_candidato)}
+              isBookmarked={bookmarkedItems.includes(item.id)}
               onBookmark={onBookmark}
               layoutType={layoutType}
             />

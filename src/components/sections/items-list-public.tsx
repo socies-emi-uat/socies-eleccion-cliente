@@ -16,7 +16,7 @@ import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { SortOption } from "@/components/sort";
 import { useBookmarks } from "@/hooks/use-bookmark";
 import { useDebounce } from "@/hooks/use-debounce";
-import { PPartido } from "@/models/PPartido";
+import { PPartido, PCandidatura, PCandidato } from "@/models/PPartido";
 import { ItemGrid } from "../item-grid";
 import { PaginationControls } from "../pagination-controls";
 import { SearchFilterControls } from "../search-filter-controls";
@@ -32,7 +32,7 @@ interface Category {
 interface ItemListProps {
   items: PPartido[];
   categories: Category[];
-  isLoading?: boolean; // <-- Añade esta línea
+  isLoading?: boolean;
 }
 
 // Define layout types
@@ -51,9 +51,12 @@ export default function ItemList({
   const [isLoading, setIsLoading] = useState(true);
   const [layoutType, setLayoutType] = useState<LayoutType>("grid");
 
+
+
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const { bookmarkedItems, toggleBookmark } = useBookmarks();
 
+  
   const categoryOptions = useMemo(
     () =>
       categories.map((category) => ({
@@ -105,9 +108,9 @@ export default function ItemList({
     if (debouncedSearchQuery) {
       const lowercaseQuery = debouncedSearchQuery.toLowerCase();
       filtered = filtered.filter(
-        (item) =>
+        (item) => 
           (item.nombrePartido?.toLowerCase() || "").includes(lowercaseQuery) ||
-          (item.sigla?.toLowerCase() || "").includes(lowercaseQuery),
+          (item.descripcion?.toLowerCase() || "").includes(lowercaseQuery),
       );
     }
 
@@ -166,7 +169,7 @@ export default function ItemList({
             const lowercaseQuery = debouncedSearchQuery.toLowerCase();
             return (
               (item.nombrePartido?.toLowerCase() || "").includes(lowercaseQuery) ||
-              (item.sigla?.toLowerCase() || "").includes(lowercaseQuery)
+              (item.descripcion?.toLowerCase() || "").includes(lowercaseQuery)
             );
           }
 
@@ -217,6 +220,7 @@ export default function ItemList({
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+
         <SearchFilterControls
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
