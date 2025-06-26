@@ -3,11 +3,11 @@ import { DefaultSeoProps } from "next-seo";
 export const defaultSEO: DefaultSeoProps = {
   title: "VotoElectronico",
   description: "La plataforma que te ofrece los mejores servicios, rapido y confiable.",
-  canonical: "https://bramacafrontend.vercel.app/",
+  canonical: "https://socies-eleccion-cliente.vercel.app/",
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: "https://bramacafrontend.vercel.app/",
+    url: "https://socies-eleccion-cliente.vercel.app/",
     siteName: "VotoElectronico",
     images: [
       {

@@ -32,7 +32,7 @@ const ServerError = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            Oops! Server error occurred
+            Oops! Error del servidor
           </motion.div>
           <motion.div
             className="mb-8"
@@ -41,7 +41,7 @@ const ServerError = () => {
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
           >
             <Button variant="default" size="lg" onClick={handleGoBack}>
-              Go Back
+              Volver
             </Button>
           </motion.div>
         </div>

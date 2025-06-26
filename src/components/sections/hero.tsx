@@ -52,12 +52,12 @@ export default function Hero() {
       >
         Impulsado por tecnologia blockchain {" "}
         <a
-          href="https://github.com/krypton612/"
+          href="https://github.com/ethereum/go-ethereum"
           target="_blank"
           rel="noopener noreferrer"
           className="underline"
         >
-          Krypton612
+          Go-Ethereum
         </a>
       </motion.p>
       <motion.p
@@ -66,12 +66,12 @@ export default function Hero() {
       >
         Created by:{" "}
         <a
-          href="https://github.com/krypton612"
+          href="https://github.com/socies-emi-uat"
           target="_blank"
           rel="noopener noreferrer"
           className="underline"
         >
-          VotoElectronico
+          SociesEMI
         </a>
       </motion.p>
     </motion.div>

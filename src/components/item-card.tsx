@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar, ExternalLink, Bookmark, Users, Clock, Info, ArrowUpRight } from "lucide-react";
+import { Calendar, ExternalLink, Bookmark, Users, Clock, Info, ArrowUpRight, BadgeCheck, Tag, UserRound, Mail, Phone, Briefcase } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -15,8 +15,15 @@ import { PPartido } from "@/models/PPartido";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import {
   Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 type LayoutType = "compact" | "grid" | "row";
 
@@ -42,6 +49,152 @@ const standardAnimations = {
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -20 },
   transition: { type: "spring", stiffness: 300, damping: 30 }
+};
+
+const getImageSrc = (base64: string) => {
+  return base64?.trim()
+    ? base64.startsWith("data:")
+      ? base64
+      : `data:image/png;base64,${base64}`
+    : "";
+};
+
+const PartidoDetailModal = ({ partido }: { partido: PPartido }) => {
+  const candidaturas = partido.candidaturas;
+
+  return (
+    <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden">
+      <div
+        className="p-6"
+        style={{
+          background: `linear-gradient(to right, ${partido.colorHex}4D, ${partido.colorHex}1A)`
+        }}
+      >
+        <DialogHeader className="mb-4">
+          <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+            <BadgeCheck className="h-5 w-5 text-primary" />
+            {partido.nombrePartido}
+          </DialogTitle>
+          <DialogDescription className="text-base opacity-90">
+            {partido.lema}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-wrap gap-3 mb-4">
+          <Badge variant="secondary" className="text-sm px-3 py-1">
+            <Tag className="h-3.5 w-3.5 mr-1 opacity-80" />
+            Partido #{partido.id}
+          </Badge>
+          <Badge variant="outline" className="text-sm px-3 py-1 bg-background/80">
+            <Calendar className="h-3.5 w-3.5 mr-1 opacity-80" />
+            {formatDate(partido.fechaFundacion)}
+          </Badge>
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-4">
+            <h3 className="text-lg font-medium flex items-center">
+              <Info className="h-4 w-4 mr-2 text-primary" />
+              Detalles del partido
+            </h3>
+
+
+            {candidaturas.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-2">
+              {candidaturas.map((candidatura) => (
+                <div
+                  key={candidatura.candidato.id}
+                  className="bg-muted/40 p-3 rounded-lg flex flex-col items-center text-center"
+                >
+                  <p className="mb-2 text-xs text-muted-foreground">
+                    {candidatura.candidato.nombreCandidato} {candidatura.candidato.apPaterno}
+                  </p>
+                  <img
+                    src={getImageSrc(candidatura.candidato.foto)}
+                    alt={candidatura.nombreCandidatura}
+                    className="w-auto h-16 rounded"
+                  />
+                  <p className="text-xs text-muted-foreground mt-3">
+                    {candidatura.candidato.cargo}
+                  </p>
+                </div>
+              ))}
+            </div>
+            ): (
+              <div className="flex items-center justify-center">
+                <p className="text-xs text-muted-foreground">No hay candidaturas</p>
+            </div>
+            )}
+
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <h3 className="text-lg font-medium flex items-center">
+              <UserRound className="h-4 w-4 mr-2 text-primary" />
+              Datos del propietario
+            </h3>
+
+            <div className="flex items-center gap-3 mb-3">
+              <Avatar className="h-12 w-12 border-2 border-primary/20">
+                <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                  {partido?.representanteLegal.charAt(0).toUpperCase() + partido?.nombrePartido.charAt(1).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+
+              <div>
+                <h4 className="font-medium">{partido?.representanteLegal}</h4>
+                <p className="text-sm text-muted-foreground">{partido?.sigla}</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <span>{partido?.correoContacto}</span>
+              </div>
+
+              {partido?.telefonoContacto && (
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span>{partido?.telefonoContacto}</span>
+                </div>
+              )}
+
+              {partido?.paginaWeb && (
+                <div className="flex items-center gap-2">
+                  <Briefcase className="h-4 w-4 text-muted-foreground" />
+                  <span>{partido?.paginaWeb}</span>
+                </div>
+              )}
+
+              {partido?.direccionSede && (
+                <div className="flex items-center gap-2">
+                  <BadgeCheck className="h-4 w-4 text-muted-foreground" />
+                  <span>{partido?.direccionSede}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <DialogFooter className="p-6 pt-0">
+        <div className="flex gap-3 w-full">
+          <Button asChild variant="outline" className="flex-1">
+            <a href={"https://api.whatsapp.com/send/?phone=591" + partido?.telefonoContacto + "&text=Hola me interesa el servicio " + partido?.nombrePartido + "&type=phone_number&app_absent=0"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
+              Contactar
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </a>
+          </Button>
+          <DialogClose asChild>
+            <Button className="flex-1">Cerrar</Button>
+          </DialogClose>
+        </div>
+      </DialogFooter>
+    </DialogContent>
+  );
 };
 
 const ItemCard: React.FC<ItemCardProps> = ({
@@ -122,13 +275,6 @@ const ItemCard: React.FC<ItemCardProps> = ({
     }
   }, [layoutType]);
 
-  const getImageSrc = (base64: string) => {
-    return base64?.trim()
-      ? base64.startsWith("data:")
-        ? base64
-        : `data:image/png;base64,${base64}`
-      : "";
-  };
 
   useEffect(() => {
     // Show highlight animation
@@ -329,6 +475,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
 
             <div className="flex gap-2 w-full">
               {/* Modal Dialog Trigger for Details */}
+              {item && (
               <Dialog>
                 <DialogTrigger asChild>
                   <Button
@@ -345,8 +492,9 @@ const ItemCard: React.FC<ItemCardProps> = ({
                   </Button>
                 </DialogTrigger>
                 {/* Add your detail modal component here */}
+                <PartidoDetailModal partido={item} />
               </Dialog>
-
+              )}
               <Button
                 asChild
                 className={cn(

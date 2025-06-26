@@ -32,7 +32,7 @@ const NotFound = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            Oops! Page not found
+            Oops! Pagina no encontrada
           </motion.div>
           <motion.div
             className="mb-8"
@@ -41,7 +41,7 @@ const NotFound = () => {
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
           >
             <Button variant="outline" size="lg" onClick={handleGoBack}>
-              Go Back
+              Volver
             </Button>
           </motion.div>
         </div>

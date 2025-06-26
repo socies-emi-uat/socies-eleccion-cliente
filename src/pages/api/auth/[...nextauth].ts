@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { API_BASE_PUBLIC } from "@/utils/config";
+import { API_BASE_PUBLIC, NEXTAUTH_URL } from "@/utils/config";
 import { LoginUsuarioResponse } from "@/models/Usuario";
 import { ApiWrapper } from "@/models/ApiWrapper";
 
@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials) {
         try {
-          const res = await fetch(`${API_BASE_PUBLIC}/login`, {
+          const res = await fetch(`${NEXTAUTH_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

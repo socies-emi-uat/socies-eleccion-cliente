@@ -2,6 +2,8 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 export const API_BASE_PUBLIC = process.env.NEXT_PUBLIC_API_BASE_PUBLIC!;
 export const API_BASE_PROTECTED = process.env.NEXT_PUBLIC_API_BASE_PROTECTED!;
 
+export const NEXTAUTH_URL = process.env.NEXTAUTH_URL!;
+
 export const BUCKET_CONFIG = {
   keyId: process.env.NEXT_PUBLIC_BUCKET_KEY_ID!,
   applicationKey: process.env.NEXT_PUBLIC_BUCKET_APPLICATION_KEY!,
