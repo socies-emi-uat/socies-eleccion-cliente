@@ -1,10 +1,10 @@
-export const API_BASE_URL = 'https://socies-elecciones-backend.onrender.com/';
-export const API_BASE_PUBLIC = 'https://socies-elecciones-backend.onrender.com/api';
-export const API_BASE_PROTECTED = 'https://socies-elecciones-backend.onrender.com/api/votante';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
+export const API_BASE_PUBLIC = process.env.NEXT_PUBLIC_API_BASE_PUBLIC!;
+export const API_BASE_PROTECTED = process.env.NEXT_PUBLIC_API_BASE_PROTECTED!;
 
 export const BUCKET_CONFIG = {
-    keyId: '0053a2bd43b9dff0000000004',
-    applicationKey: 'K005Es3Xe2iWKNlGoolfTqQxdPTYTk8',
-    bucketName: 'socies-admin',
-    endpoint: 'https://s3.us-east-005.backblazeb2.com'
-  };
+  keyId: process.env.NEXT_PUBLIC_BUCKET_KEY_ID!,
+  applicationKey: process.env.NEXT_PUBLIC_BUCKET_APPLICATION_KEY!,
+  bucketName: process.env.NEXT_PUBLIC_BUCKET_NAME!,
+  endpoint: process.env.NEXT_PUBLIC_BUCKET_ENDPOINT!,
+};
