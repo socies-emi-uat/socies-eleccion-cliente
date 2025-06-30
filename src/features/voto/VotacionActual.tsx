@@ -21,6 +21,7 @@ interface Partido {
 }
 
 interface Candidato {
+  foto: string;
   nombreCandidato: string;
   apPaterno: string;
   apMaterno: string;
@@ -51,6 +52,7 @@ export default function PaginaVotacionActual() {
   const [loading, setLoading] = useState(true);
   const [restante, setRestante] = useState<string>("");
   const [candidaturaActiva, setCandidaturaActiva] = useState<Candidatura | null>(null);
+  const [confirmarVoto, setConfirmarVoto] = useState<Candidatura | null>(null);
 
   useEffect(() => {
     // Simulación de fetch desde la API
@@ -157,6 +159,11 @@ export default function PaginaVotacionActual() {
     );
   }
 
+  const handleConfirmarVoto = (candidatura: Candidatura) => {
+    handleVotar(candidatura);
+    setConfirmarVoto(null);
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-4">
       <div className="mb-8 text-center">
@@ -189,7 +196,7 @@ export default function PaginaVotacionActual() {
                 </div>
               </div>
               <div className="mt-4 flex gap-2">
-                <Button onClick={() => handleVotar(candidatura)} className="flex-1">
+                <Button onClick={() => setConfirmarVoto(candidatura)} className="flex-1">
                   Votar
                 </Button>
                 <Button variant="outline" onClick={() => setCandidaturaActiva(candidatura)} className="flex-1">
@@ -215,6 +222,25 @@ export default function PaginaVotacionActual() {
                 <p><strong>Contacto:</strong> {candidaturaActiva.partido.correoContacto}</p>
                 <p><strong>Web:</strong> <a href={candidaturaActiva.partido.paginaWeb} className="text-blue-600 underline">{candidaturaActiva.partido.paginaWeb}</a></p>
                 <p><strong>Propuesta:</strong> {candidaturaActiva.candidato.propuesta}</p>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!confirmarVoto} onOpenChange={() => setConfirmarVoto(null)}>
+        <DialogContent>
+          {confirmarVoto && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Confirmar Voto</DialogTitle>
+                <DialogDescription>
+                  ¿Estás seguro que deseas votar por <strong>{confirmarVoto.nombreCandidatura}</strong>?
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end gap-2 mt-4">
+                <Button variant="outline" onClick={() => setConfirmarVoto(null)}>Cancelar</Button>
+                <Button onClick={() => handleVotar(confirmarVoto)}>Confirmar Voto</Button>
               </div>
             </>
           )}
