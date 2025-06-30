@@ -31,11 +31,11 @@ export default function UserFormView() {
   const router = useRouter();
 
   const defaultValues: UserData = {
-    nombre: 'Ronald Díaz',
-    email: 'ronalddiazy@gmail.com',
+    nombre: 'Camilo Condor Mamani',
+    email: 'Votacion',
     telefono: '+591 777-12345',
     direccion: 'Calle Siempre Viva 742',
-    ci: '12345678 LP',
+    ci: '12345678',
     fechaNacimiento: '1990-05-12',
   };
 

@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { VTCandidatura, VTProcesoElectoral } from "@/models/VVoto";
+
+import { candidaturas as apiCandidaturas } from "@/constats/api-votar"; // correcto
+import { toast } from "sonner";
 
 interface Partido {
   nombrePartido: string;
@@ -48,93 +53,29 @@ interface ProcesoElectoral {
 }
 
 export default function PaginaVotacionActual() {
-  const [proceso, setProceso] = useState<ProcesoElectoral | null>(null);
+  const [proceso, setProceso] = useState<VTProcesoElectoral | null>(null);
   const [loading, setLoading] = useState(true);
   const [restante, setRestante] = useState<string>("");
-  const [candidaturaActiva, setCandidaturaActiva] = useState<Candidatura | null>(null);
-  const [confirmarVoto, setConfirmarVoto] = useState<Candidatura | null>(null);
-
+  const [candidaturaActiva, setCandidaturaActiva] = useState<VTCandidatura | null>(null);
+  const [confirmarVoto, setConfirmarVoto] = useState<VTCandidatura | null>(null);
+  const { data: session } = useSession();
   useEffect(() => {
-    // Simulación de fetch desde la API
-    setTimeout(() => {
-      fetch("/api/mock-proceso")
-        .then(() => {
-          const respuesta = {
-            nombreProceso: "Presidencial",
-            descripcionProceso: "Elección presidencial: 1-2 vueltas",
-            fechaInicio: "2024-01-01T00:00:00",
-            fechaFin: "2024-12-31T23:59:59",
-            candidaturas: [
-                {
-                    "nombreCandidatura": "Ronald Diaz - MAS",
-                    "lema": "Antes muertos que esclavos",
-                    "partido": {
-                        "id": 1,
-                        "nombrePartido": "Movimiento al Socialismo",
-                        "sigla": "MAS",
-                        "lema": "Progreso para todos",
-                        "logoUrl": "partidos/01JYNM0Z9NBZMQGD78DDA027FG.png",
-                        "colorHex": "#225fde",
-                        "pais": "Bolivia",
-                        "representanteLegal": "Carlos Gomez",
-                        "descripcion": "Un nuevo partido politico",
-                        "direccionSede": "Av. Central 456",
-                        "paginaWeb": "https://nuevopartido.bo",
-                        "telefonoContacto": "76543210",
-                        "correoContacto": "contacto@nuevopartido.bo",
-                        "fechaFundacion": "2025-06-13T00:00:00",
-                        "estado": true
-                    },
-                    "candidato": {
-                        "foto": "candidatos/01JYDXB79AKXH9RPDVK5DFNZ4X.jpg",
-                        "id": 1,
-                        "nombreCandidato": "Ronald",
-                        "apPaterno": "Diaz",
-                        "apMaterno": "Otrillas",
-                        "fechaNacimiento": "1997-06-04",
-                        "fotoUrl": "candidatos/01JYDXB79AKXH9RPDVK5DFNZ4X.jpg",
-                        "propuesta": "Por una bolivia libre de corrupcion",
-                        "cargo": "Sin cargo",
-                        "estado": "Activo"
-                    }
-                },
-                {
-                    "nombreCandidatura": "Alianza Popular",
-                    "lema": "Comprometidos con la Patria, enfocados en salvar el pais y un futuro mejor",
-                    "partido": {
-                        "id": 3,
-                        "nombrePartido": "Alianza Politica",
-                        "sigla": "AP",
-                        "lema": "Comprometidos con la Patria, enfocados en salvar el pais y un futuro mejor",
-                        "colorHex": "#29bdfa",
-                        "pais": "Bolivia",
-                        "representanteLegal": "Sandra Hinojosa Núñez",
-                        "direccionSede": "Avenida Mariscal Santa Cruz Nro. 1364, Edificio",
-                        "telefonoContacto": "73745454",
-                        "correoContacto": "alianzaPopular2025@gmail.com",
-                        "fechaFundacion": "2025-04-17T00:00:00",
-                        "estado": true
-                    },
-                    "candidato": {
-                        "foto": "candidatos/01JYDXB79AKXH9RPDVK5DFNZ4X.jpg",
-                        "id": 3,
-                        "nombreCandidato": "Andronico",
-                        "apPaterno": "Rodriguez",
-                        "apMaterno": "Ledezma",
-                        "fechaNacimiento": "1988-11-11",
-                        "fotoUrl": null,
-                        "propuesta": "propone mejorar condiciones laborales, renovar empresas estatales, fomentar la economía del conocimiento y reducir impuestos a sectores privados.",
-                        "cargo": "Sin cargo",
-                        "estado": "Activo"
-                    }
-                }
-            ] // Aquí se colocan las candidaturas reales
-          };
-          setProceso(respuesta as ProcesoElectoral);
-          setLoading(false);
-        });
-    }, 1000);
-  }, []);
+    const fetchProceso = async () => {
+      try {
+        const respuesta = await apiCandidaturas.getAll({ token: session?.user?.token ?? "" });
+        setProceso(respuesta as VTProcesoElectoral);
+      } catch (err) {
+        console.error("Error al cargar el proceso electoral", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    if (session?.user?.token) {
+      fetchProceso();
+    }
+  }, [session?.user?.token]);
+  
 
   useEffect(() => {
     if (!proceso) return;
@@ -145,9 +86,16 @@ export default function PaginaVotacionActual() {
     return () => clearInterval(interval);
   }, [proceso]);
 
-  const handleVotar = (candidatura: Candidatura) => {
-    alert(`Has votado por: ${candidatura.nombreCandidatura}`);
-    // Aquí puedes implementar la lógica real de votación
+
+  const handleVotar = (candidatura: VTCandidatura) => {
+    setConfirmarVoto(null);
+    startTransition(() => {
+      let loading = toast.loading(`Cargando votación...`);
+      setTimeout(() => {
+        toast.success(`Votación exitosa`);
+        toast.dismiss(loading);
+      }, 2000);
+    });
   };
 
   if (loading || !proceso) {
@@ -159,7 +107,7 @@ export default function PaginaVotacionActual() {
     );
   }
 
-  const handleConfirmarVoto = (candidatura: Candidatura) => {
+  const handleConfirmarVoto = (candidatura: VTCandidatura) => {
     handleVotar(candidatura);
     setConfirmarVoto(null);
   };

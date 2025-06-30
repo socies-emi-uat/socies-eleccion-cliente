@@ -48,8 +48,8 @@ interface Resultado {
 }
 
 const dataMock: Resultado[] = [
-  { candidato: "María López", votos: 3400, proceso: "Elecciones Generales 2025" },
-  { candidato: "Juan Pérez", votos: 2900, proceso: "Elecciones Generales 2025" },
+  { candidato: "Ronald Diaz - MAS", votos: 3400, proceso: "Elecciones Generales 2025" },
+  { candidato: "Alianza Popular", votos: 2900, proceso: "Elecciones Generales 2025" },
   { candidato: "Voto Blanco", votos: 300, proceso: "Elecciones Generales 2025" },
 
   { candidato: "A favor", votos: 4000, proceso: "Referéndum Constitucional" },

@@ -8,6 +8,7 @@ import { CheckCircle, XCircle, Loader2, AlertCircle, ArrowLeft } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
+import { Votacion } from "@/constats/api-votar";
 
 interface VotoResponse {
   puedeVotar: boolean;
@@ -66,8 +67,8 @@ export default function EstadoVoto() {
       setError(null);
       
       try {
-        const response = await axios.get<VotoResponse>(`/api/voto/estado/${session.user.id}`);
-        setVotoInfo(response.data);
+        const response = await Votacion.verificarVoto({ token: session.user.token });
+        setVotoInfo({ puedeVotar: response });
       } catch (err: any) {
         setError("Error al obtener el estado de voto");
         console.error("Error fetching vote status:", err);

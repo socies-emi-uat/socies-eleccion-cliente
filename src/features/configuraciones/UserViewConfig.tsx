@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { Votacion } from "@/constats/api-votar";
 
 interface VotoResponse {
   puedeVotar: boolean;
@@ -35,8 +36,8 @@ export default function UserViewConfig() {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get<VotoResponse>(`/api/voto/estado/${session.user.id}`);
-        setVotoInfo(response.data);
+        const response = await Votacion.verificarVoto({ token: session.user.token });
+        setVotoInfo({ puedeVotar: response });
       } catch (err) {
         setError("Error al obtener el estado de voto");
       } finally {
