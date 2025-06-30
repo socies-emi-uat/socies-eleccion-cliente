@@ -26,10 +26,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function UserMenu() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   if (pathname === "/auth/signin") {
     return null;
   }
@@ -55,6 +57,41 @@ export function UserMenu() {
         <User className="h-[1.2rem] w-[1.2rem] animate-pulse" />
       </Button>
     );
+  }
+
+  const handleVotar = (opcion: string) => {
+    switch (opcion) {
+      case "votar":
+        router.push("/votar");
+        break;
+      case "estado":
+        router.push("/estado");
+        break;
+      case "resultados":
+        router.push("/resultados");
+        break;
+      case "historial":
+        router.push("/historial");
+        break;
+      case "perfil":
+        router.push("/perfil");
+        break;
+      case "configuracion":
+        router.push("/configuracion");
+        break;
+      default:
+        break;
+    }
+  }
+
+  const openModal = (opcion: string) => {
+    switch (opcion) {
+      case "estado":
+        // setOpenModal(true);
+        break;
+      default:
+        break;
+    }
   }
 
   // Si está autenticado, mostrar menú de usuario
@@ -84,34 +121,34 @@ export function UserMenu() {
         
         <DropdownMenuSeparator />
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={() => handleVotar("votar")}>
           <Vote className="mr-2 h-4 w-4" />
           <span>Votar</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={() => openModal("estado")}>
           <CheckCircle className="mr-2 h-4 w-4" />
           <span>Estado de Voto</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={() => handleVotar("resultados")}>
           <BarChart3 className="mr-2 h-4 w-4" />
           <span>Resultados</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={() => openModal("historial")}>
           <Clock className="mr-2 h-4 w-4" />
           <span>Historial</span>
         </DropdownMenuItem>
         
         <DropdownMenuSeparator />
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={() => handleVotar("perfil")}>
           <UserCircle className="mr-2 h-4 w-4" />
           <span>Mi Perfil</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={() => openModal("configuracion")}>
           <Settings className="mr-2 h-4 w-4" />
           <span>Configuración</span>
         </DropdownMenuItem>

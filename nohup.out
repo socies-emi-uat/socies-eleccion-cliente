@@ -46,3 +46,6 @@ Emitted 'error' event on ReadStream instance at:
 }
 
 Node.js v20.18.3
+MESA-INTEL: warning: Haswell Vulkan support is incomplete
+[90m[main 2025-06-30T16:38:18.545Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/1.1.6/348fde8e82f2272b73cef06c34a778b63022c04ed956349b6311dedf0611c7ee/stable
+[90m[main 2025-06-30T16:38:18.546Z][0m update#setState idle
